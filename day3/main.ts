@@ -1,5 +1,5 @@
 if (import.meta.main) {
-	let input = await Deno.readTextFile('./day3/input');
+	const input = await Deno.readTextFile('./day3/input');
 
 	const nonSymbols = [...'0123456789.'];
 	const grid: string[][] = [];
@@ -43,10 +43,107 @@ if (import.meta.main) {
 	}
 	console.log('Part 1:', sum);
 
-	input = await Deno.readTextFile('./day3/sample');
 	sum = 0;
-	// for (const line of input.trim().split('\n')) {
-	// 	// 
-	// }
-	// console.log('Part 2:', sum);
+	y = 0;
+	let x = 0;
+	while (y < grid.length) {
+		while (x < grid[y].length && grid[y][x] !== '*') {
+			x++;
+		}
+		
+		if (grid[y][x] === '*') {
+			const gearNumbers: number[] = [];
+			if (y - 1 >= 0) {
+				xStart = x - 1;
+				if (!Number.isNaN(Number(grid[y-1][xStart]))) {
+					while (xStart >= 0 && !Number.isNaN(Number(grid[y-1][xStart]))) {
+						xStart--;
+					}
+					xStart++;
+					if (y===1) console.log({xStart})
+				} else {
+					while (xStart <= x + 1 && xStart < grid[y-1].length && Number.isNaN(Number(grid[y-1][xStart]))) {
+						xStart++;
+					}
+				}
+				if (xStart < x + 2 && !Number.isNaN(Number(grid[y-1][xStart]))) {
+					let xEnd = xStart + 1;
+					while (xEnd < grid[y-1].length && !Number.isNaN(Number(grid[y-1][xEnd]))) {
+						xEnd++;
+					}
+					gearNumbers.push(Number(grid[y-1].slice(xStart, xEnd).join('')));
+				}
+
+				if (!Number.isNaN(Number(grid[y - 1][x - 1])) && Number.isNaN(Number(grid[y - 1][x])) && !Number.isNaN(Number(grid[y - 1][x + 1]))) {
+					let xEnd = x + 1;
+					while (xEnd < grid[y - 1].length && !Number.isNaN(Number(grid[y - 1][xEnd]))) {
+						xEnd++;
+					}
+					gearNumbers.push(Number(grid[y - 1].slice(x + 1, xEnd).join('')));
+				}
+			}
+			
+
+			if (x - 1 >= 0 && !Number.isNaN(Number(grid[y][x-1]))) {
+				xStart = x - 1;
+				if (!Number.isNaN(Number(grid[y][xStart]))) {
+					while (xStart >= 0 && !Number.isNaN(Number(grid[y][xStart]))) {
+						xStart--;
+					}
+				}
+				gearNumbers.push(Number(grid[y].slice(xStart + 1, x).join('')));
+			}
+
+			if (x + 1 < grid[y].length && !Number.isNaN(Number(grid[y][x+1]))) {
+				let xEnd = x+1;
+				while (xEnd < grid[y].length && !Number.isNaN(Number(grid[y][xEnd]))) {
+						xEnd++;
+				}
+				gearNumbers.push(Number(grid[y].slice(x + 1, xEnd).join('')));
+			}
+
+			if (y + 1 < grid.length) {
+				xStart = Math.max(x - 1, 0);
+				if (!Number.isNaN(Number(grid[y+1][xStart]))) {
+					while (xStart >= 0 && !Number.isNaN(Number(grid[y + 1][xStart]))) {
+						xStart--;
+					}
+					xStart++;
+				} else {
+					while (xStart <= x + 1 && xStart < grid[y + 1].length && Number.isNaN(Number(grid[y + 1][xStart]))) {
+						xStart++;
+					}
+				}
+				
+				if (xStart < x + 2 && !Number.isNaN(Number(grid[y + 1][xStart]))) {
+					let xEnd = xStart + 1;
+					while (xEnd < grid[y+1].length && !Number.isNaN(Number(grid[y+1][xEnd]))) {
+						xEnd++;
+					}
+					gearNumbers.push(Number(grid[y+1].slice(xStart, xEnd).join('')));
+				}
+
+				if (!Number.isNaN(Number(grid[y + 1][x - 1])) && Number.isNaN(Number(grid[y + 1][x])) && !Number.isNaN(Number(grid[y + 1][x + 1]))) {
+					let xEnd = x + 1;
+					while (xEnd < grid[y + 1].length && !Number.isNaN(Number(grid[y + 1][xEnd]))) {
+						xEnd++;
+					}
+					gearNumbers.push(Number(grid[y + 1].slice(x + 1, xEnd).join('')));
+				}
+			}
+
+			console.log({gearNumbers})
+			if (gearNumbers.length >= 2) {
+				sum += gearNumbers.reduce((a, b) => a * b, 1);
+			}
+		}
+		
+		if (x >= grid[y].length) {
+			y++;
+			x = 0;
+		} else {
+			x++;
+		}
+	}
+	console.log('Part 2:', sum);
 }
