@@ -54,7 +54,7 @@ if (import.meta.main) {
 				sequences.push(sequence);
 			}
 
-			const partialSum = sequences.reduce((acc, seq) => seq[0] - acc, 0);
+			const partialSum = sequences.reduceRight((acc, seq) => seq[0] - acc, 0);
 			// console.log({ sequences, partialSum });
 			sum += partialSum;
 		}
