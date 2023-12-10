@@ -1,7 +1,7 @@
 if (import.meta.main) {
 	// deno-lint-ignore no-unused-labels
 	part1: {
-		const input = await Deno.readTextFile('./day9/sample');
+		const input = await Deno.readTextFile('./day9/input');
 
 		const lines = input.trim().split('\n');
 		let sum = 0;
@@ -23,7 +23,7 @@ if (import.meta.main) {
 				sequences.push(sequence);
 			}
 
-			const partialSum = sequences.reduce((acc, seq) => acc + seq[seq.length - 1], 0);
+			const partialSum = sequences.reduceRight((acc, seq) => acc + seq[seq.length - 1], 0);
 			sum += partialSum;
 		}
 
