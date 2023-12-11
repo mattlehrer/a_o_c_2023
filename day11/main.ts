@@ -117,6 +117,6 @@ if (import.meta.main) {
 			}
 		}
 
-		console.log('part 1: ', totalDistance);
+		console.log('part 2: ', totalDistance);
 	}
 }
